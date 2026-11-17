@@ -1,0 +1,12 @@
+{
+  "name": "ioddfinder-agent",
+  "interface": { "displayName": "IODDfinder Agent" },
+  "plugins": [
+    {
+      "name": "ioddfinder-agent",
+      "source": { "source": "local", "path": "./plugin" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_USE" },
+      "category": "Productivity"
+    }
+  ]
+}

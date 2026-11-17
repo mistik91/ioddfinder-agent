@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "ioddfinder-agent",
+  "version": "0.1.0",
+  "description": "Search the live IO-Link IODDfinder catalog and download exact IODD packages with optional local reuse.",
+  "author": { "name": "mistik91", "url": "https://github.com/mistik91" },
+  "homepage": "https://github.com/mistik91/ioddfinder-agent",
+  "repository": "https://github.com/mistik91/ioddfinder-agent",
+  "license": "MIT",
+  "keywords": ["io-link", "iodd", "ioddfinder", "mcp", "industrial-automation"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "IODDfinder Agent",
+        "shortDescription": "Find and download IO-Link device descriptions",
+        "developerName": "mistik91",
+        "category": "Productivity"
+      }
+    }
+  }
+}

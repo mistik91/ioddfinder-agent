@@ -1,0 +1,67 @@
+name: Release
+on:
+  push:
+    tags: ['v[0-9]*']
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-2022
+            rid: win-x64
+          - os: ubuntu-24.04
+            rid: linux-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Verify tag matches release metadata
+        shell: python
+        run: |
+          import json, os
+          version = json.load(open('plugin/plugin.json'))['version']
+          assert os.environ['GITHUB_REF_NAME'] == 'v' + version
+      - run: python -m pip install jsonschema==4.25.1
+      - run: python scripts/validate_plugin.py
+      - run: dotnet build IoddFinder.sln -c Release
+      - run: dotnet test IoddFinder.sln -c Release --no-build
+      - run: dotnet publish src/IoddFinder.Cli/IoddFinder.Cli.csproj -c Release -r ${{ matrix.rid }} -p:PublishAot=true -o artifacts/native
+      - run: python scripts/package.py --rid ${{ matrix.rid }} --publish-dir artifacts/native
+      - run: python scripts/verify_archives.py --rid ${{ matrix.rid }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-${{ matrix.rid }}
+          path: artifacts/release/*.zip
+          if-no-files-found: error
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: release-*
+          path: artifacts/release
+          merge-multiple: true
+      - name: Generate combined checksums
+        shell: python
+        run: |
+          import hashlib, pathlib
+          folder = pathlib.Path('artifacts/release')
+          lines = [hashlib.sha256(p.read_bytes()).hexdigest() + '  ' + p.name for p in sorted(folder.glob('*.zip'))]
+          assert len(lines) == 5, lines
+          (folder / 'SHA256SUMS.txt').write_text('\n'.join(lines) + '\n')
+      - name: Publish verified release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" artifacts/release/* --verify-tag --title "$GITHUB_REF_NAME" --notes-file CHANGELOG.md --latest

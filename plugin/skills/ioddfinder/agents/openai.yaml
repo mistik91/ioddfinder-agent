@@ -1,0 +1,4 @@
+interface:
+  display_name: "IODDfinder"
+  short_description: "Find and download IO-Link device descriptions"
+  default_prompt: "Use $ioddfinder to find the correct IODD for my IO-Link device and download its ZIP."
