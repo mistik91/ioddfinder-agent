@@ -72,6 +72,13 @@ def package(rid, publish, output):
                 config = json.loads(path.read_text())
                 config['mcpServers']['ioddfinder']['command'] = './bin/' + executable
                 data = json.dumps(config, indent=2).encode()
+            elif name == '.mcp.json':
+                # Codex 0.130 resolves cwd against the plugin root. Launch the
+                # bundled binary from there using fixed arguments on each OS.
+                command, args = ('cmd.exe', ['/d', '/c', r'bin\iodd.exe', 'mcp']) if rid.startswith('win-') else (
+                    '/bin/sh', ['-c', 'exec ./bin/iodd mcp'])
+                config = {'mcpServers': {'ioddfinder': {'command': command, 'args': args, 'cwd': './'}}}
+                data = json.dumps(config, indent=2).encode()
             else:
                 data = path.read_bytes()
             add(archive, prefix + name, data)

@@ -15,6 +15,7 @@ If `iodd` is absent from PATH, a platform release plugin may bundle `bin/iodd.ex
 
 - Search by manufacturer/product/article, or combine `vendorId` and `deviceId` when known. Device IDs alone are not globally unique. Article numbers can identify multiple variants or revisions.
 - Use exact text matching when resolving a known model. Keep user-supplied values as literal arguments; do not interpolate them into executable shell code.
+- If an exact manufacturer filter returns no rows for a known model, retry with the exact model alone and verify the manufacturer in the results. The catalog can use a full company name where the user supplied a shorter brand name.
 - Follow pagination when the needed entry is not in the returned page. An empty page is not proof that a different spelling or filter has no matches.
 - Use details to confirm the model and description. If materially different candidates remain, show the relevant differences and resolve the ambiguity before selecting a package.
 - Use versions when a release is specified. `ioLinkRev` (such as 1.1) is different from an IODD release string. Version-history results are not guaranteed newest-first; do not automatically select the first row.

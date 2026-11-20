@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "ioddfinder": { "command": "iodd", "args": ["mcp"] }
+  }
+}

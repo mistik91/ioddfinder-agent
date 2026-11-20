@@ -20,6 +20,18 @@ python scripts/verify_archives.py --rid win-x64
 
 Use `linux-x64` on the Linux build host. Archive verification checks SHA-256, ZIP integrity, explicit content boundaries, plugin schema and paths, and a real MCP handshake/tool invocation through the bundled executable. `tests/smoke.py --live -- EXECUTABLE` adds a bounded live lookup/viewer read and one package download; CI uses fake upstream responses and does not contact IODDfinder.
 
+## Manual agent checks
+
+Run these prompts with fresh context and the installed IODDfinder skill and MCP tools. A subagent can test tool discovery and device selection. Use a new Codex session to test plugin loading after installation.
+
+| Prompt | Expected behavior |
+| --- | --- |
+| Find the IODD for ifm AL2201 Cyclic. Check the available releases, download the older release, and request that same package again. | Confirm model and release before downloading. In an empty test library the first response reports `network` and the second reports `library`. Package ID, path and hash agree. Use a separate test library if the package is already saved. |
+| I need the IODD for a Balluff BES sensor. Can you find the right one? | Check the live catalog. If multiple devices match, ask for the complete type code, article number or device ID before selecting a package. |
+| Find the IODD for OMRON E2EQ-X3B4-IL2 and report the catalog identity. | Search by exact product name, confirm the manufacturer and report the returned vendor, device and IODD IDs. If an exact manufacturer alias returns no matches, retry with the exact product name alone or resolve the manufacturer name first. |
+
+Keep these checks opt-in. Catalog data can change, so assess how the agent handles current results rather than comparing the entire response to a snapshot.
+
 ## Architecture
 
 - `IoddFinder.Core` owns the upstream client, viewer projection and optional saved-download library, using .NET libraries only.

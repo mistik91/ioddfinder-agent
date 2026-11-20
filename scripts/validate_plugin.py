@@ -19,6 +19,13 @@ if command.startswith('./'):
     assert target.is_relative_to(root) and target.is_file(), target
 else:
     assert command == 'iodd', 'Source plugin uses the separately installed CLI on PATH'
+portable = json.loads((root / 'plugin.json').read_text())
+legacy = json.loads((root / '.codex-plugin/plugin.json').read_text())
+assert all(legacy[key] == portable[key] for key in ('name', 'version'))
+assert legacy['skills'] == './skills/' and legacy['mcpServers'] == './.mcp.json'
+if command == 'iodd':
+    legacy_server = json.loads((root / '.mcp.json').read_text())['mcpServers']['ioddfinder']
+    assert legacy_server == {'command': 'iodd', 'args': ['mcp']}
 skill = root / 'skills/ioddfinder/SKILL.md'
 text = skill.read_text(encoding='utf-8')
 assert text.startswith('---\n') and 'name: ioddfinder\n' in text

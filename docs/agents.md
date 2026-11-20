@@ -33,6 +33,8 @@ Try: “Find the IODD for ifm TN2405. Confirm the vendor and device IDs, downloa
 
 ## Portable Agent Plugins 1.0
 
+The repository also provides a `.codex-plugin/plugin.json` compatibility manifest for Codex versions that require it. The repository marketplace uses an installed `iodd` on PATH. Plugin archives built from this source launch the bundled executable in the plugin directory.
+
 Release plugin ZIPs contain one `ioddfinder-agent/` folder with:
 
 ```text
@@ -52,7 +54,7 @@ Plugin installation is host-specific; a portable manifest does not guarantee tha
 The repository includes `.agents/plugins/marketplace.json`, pointing at `./plugin`. Its source MCP configuration uses `iodd` on PATH, so install the CLI first for this route. With a current Codex client supporting plugin marketplaces:
 
 ```sh
-codex plugin marketplace add mistik91/ioddfinder-agent --ref v0.1.0
+codex plugin marketplace add mistik91/ioddfinder-agent --ref main
 ```
 
 Then use the supported desktop plugin browser to install the plugin from the added marketplace. Availability depends on the host version and workspace settings. This setup follows [OpenAI's plugin packaging documentation](https://developers.openai.com/plugins/build/plugins). A downloaded platform plugin archive is the bundled-binary route; the repository marketplace is the separately-installed-CLI route.

@@ -1,0 +1,11 @@
+{
+  "name": "ioddfinder-agent",
+  "version": "0.1.0",
+  "description": "Search IODDfinder and download exact IO-Link device descriptions.",
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "IODDfinder Agent",
+    "shortDescription": "Find and download IO-Link device descriptions"
+  }
+}
