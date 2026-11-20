@@ -17,7 +17,7 @@ The initial native targets are Windows x64 and Linux x64. Linux releases are bui
 ## Windows
 
 1. Download the `win-x64` CLI ZIP and `SHA256SUMS.txt` from the same release.
-2. Compare `(Get-FileHash .\ioddfinder-agent-0.1.0-win-x64.zip -Algorithm SHA256).Hash` with the archive's line in `SHA256SUMS.txt`.
+2. Compare `(Get-FileHash .\ioddfinder-agent-0.1.1-win-x64.zip -Algorithm SHA256).Hash` with the archive's line in `SHA256SUMS.txt`.
 3. Extract the ZIP into a dedicated folder such as `%LOCALAPPDATA%\Programs\IoddFinder`.
 4. Run it using its full path:
 
@@ -38,7 +38,7 @@ Download the `linux-x64` CLI ZIP and `SHA256SUMS.txt` into the same empty direct
 ```sh
 sha256sum --check --ignore-missing SHA256SUMS.txt
 mkdir -p "$HOME/.local/opt/ioddfinder-agent" "$HOME/.local/bin"
-unzip ioddfinder-agent-0.1.0-linux-x64.zip -d "$HOME/.local/opt/ioddfinder-agent"
+unzip ioddfinder-agent-0.1.1-linux-x64.zip -d "$HOME/.local/opt/ioddfinder-agent"
 chmod +x "$HOME/.local/opt/ioddfinder-agent/iodd"
 ln -s "$HOME/.local/opt/ioddfinder-agent/iodd" "$HOME/.local/bin/iodd"
 "$HOME/.local/bin/iodd" --version

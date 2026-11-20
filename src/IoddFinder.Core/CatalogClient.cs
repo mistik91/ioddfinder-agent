@@ -134,7 +134,7 @@ public sealed class CatalogClient(HttpClient http, Func<TimeSpan, CancellationTo
         for (var attempt = 0; ; attempt++)
         {
             using var request = new HttpRequestMessage(HttpMethod.Get, path);
-            request.Headers.UserAgent.ParseAdd("IoddFinderAgent/0.1.0");
+            request.Headers.UserAgent.ParseAdd("IoddFinderAgent/0.1.1");
             HttpResponseMessage response;
             try { response = await http.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, ct); }
             catch (HttpRequestException) when (attempt < 2)
